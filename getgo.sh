@@ -2,7 +2,7 @@
 
 # Script to download and install the latest version of Go on Debian/Ubuntu-based systems
 
-go_ver="go1.23.2.linux-"
+go_ver="go1.24.3.linux-"
 
 clear
 
@@ -36,21 +36,35 @@ echo -e "Downloading Go... Please wait\n"
 curl -sL "https://go.dev/dl/${go_ver}${cpu_arch}.tar.gz" -o "${go_ver}${cpu_arch}.tar.gz"
 echo -e "\nDownloaded ${go_ver}${cpu_arch}.tar.gz successfully."
 
-sleep 2S
+sleep 2
 clear
+
+# Removing any existing Go installation
+echo -e "Removing any existing Go installation from /usr/local/go\n"
+sudo rm -rf /usr/local/go
 
 # Extracting Go to /usr/local
 echo -e "Extracting Go to /usr/local (sudo / root access required)\n"
 sudo tar -xzf "${go_ver}${cpu_arch}.tar.gz" -C /usr/local
 echo -e "\nGo has been successfully extracted to /usr/local."
 
+# Add Go to PATH in ~/.bashrc if not already added
+go_path_line='export PATH=$PATH:/usr/local/go/bin'
+if ! grep -Fxq "$go_path_line" ~/.bashrc; then
+    echo -e "\nAdding Go path to ~/.bashrc"
+    echo "$go_path_line" >> ~/.bashrc
+else
+    echo -e "\nGo path already present in ~/.bashrc"
+fi
+
+# Source ~/.bashrc for immediate use (only for bash users)
+source ~/.bashrc
+
 sleep 2
 clear
 
-export PATH=$PATH:/usr/local/go/bin
-
 # Display Go version to confirm installation
-echo -e "\nInstallation complete. Go version:"
+echo -e "\nInstallation complete. Version:"
 go version
 
 echo -e "\nAll done! Go has been installed successfully.\n"
