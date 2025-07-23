@@ -2,7 +2,7 @@
 
 # Script to download and install the latest version of Go on Debian/Ubuntu-based systems
 
-go_ver="go1.24.3.linux-"
+go_ver="go1.24.5.linux-"
 
 clear
 
